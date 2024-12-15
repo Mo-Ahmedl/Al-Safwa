@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Al Safwa Company</title>
+    <link rel="stylesheet" href="cement.css">
+
+</head>
+<body>
+
+    <div class="container">
+        <header>
+                <a href="1" class="logo">Al-Safwa</a>
+        </header>
+        </div>
+        
+        
+
+
+
+
+
+
+
+
+
+
+
+
+    <div class="form-container">
+        <h2 class="logo2"><img class="iconiron" src="cement.png" width="40px"> حجز اسمنت </h2>
+        <form id="infoForm">
+            <input type="text"  id="name" placeholder="الاسم" required><br>
+            <input type="text" id="phone" placeholder="رقم الهاتف" required><br>
+            <input type="text" id="address" placeholder="عنوان المنزل" required><br>
+            
+            <!-- مربع الاختيارات (Select Box) للمدينة -->
+            <select id="city" required>
+                <option  value="">مدينه</option>
+                <option value="سمسطا">سمسطا</option>
+                <option value="مزورة">مزورة</option>
+                <option value="بدهل">بدهل</option>
+                <option value="خيار 4"></option>
+            </select><br><br>
+
+            <!-- مربع الاختيارات (Select Box) للكمية -->
+            <select id="quantity" required>
+                <option  value="">الكميه</option>
+                <option value="نصف طن">نصف طن</option>
+                <option value="طن">طن</option>
+                <option value="2 طن">2 طن</option>
+                <option value="3 طن">3 طن</option>
+                <option value="4 طن">4 طن</option>
+                <option value="5 طن">5 طن</option>
+                <option value="6 طن">6 طن</option>
+                <option value="7 طن">7 طن</option>
+                <option value="8 طن">8 طن</option>
+                <option value="9 طن">9 طن</option>
+                <option value="10 طن">10 طن</option>
+            </select><br><br>
+
+            <button type="button" onclick="submitForm()">إرسال</button>
+        </form>
+    </div>
+
+    <script>
+        // دالة لإرسال البيانات عبر API إلى بوت تلجرام
+        function submitForm() {
+            const name = document.getElementById("name").value;
+            const phone = document.getElementById("phone").value;
+            const address = document.getElementById("address").value;
+            const city = document.getElementById("city").value;  // قيمة المدينة المختارة
+            const quantity = document.getElementById("quantity").value;  // قيمة الكمية
+            const message = `المدينة: ${city}\nالكمية: ${quantity}`;
+
+            // تحقق إذا كانت الحقول ممتلئة
+            if (name && phone && address && city && quantity) {
+                const botToken = "7802375353:AAG7Y_vnIK-4hYMBR3eS_mZyV9e-ZqcsJt8";  // توكن البوت
+                const chatId = "5471126331";  // معرّف الدردشة
+
+                // تكوين الرسالة التي سيتم إرسالها
+                const textMessage = `تم إدخال المعلومات:\n\n
+                                    الاسم: ${name}\n
+                                    رقم الهاتف: ${phone}\n
+                                    عنوان المنزل: ${address}\n
+                                    المدينة: ${city}\n
+                                    الكمية: ${quantity}\n`;
+
+                // إرسال الطلب إلى API
+                fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        chat_id: chatId,
+                        text: textMessage
+                    })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.ok) {
+                        alert("تم ارسال المعلومات بنجاح ,سيتم التواصل معك في اقرب وقت");
+                        // مسح البيانات بعد الإرسال
+                        document.getElementById("infoForm").reset();
+                    } else {
+                        alert("حدث خطأ أثناء إرسال البيانات.");
+                    }
+                })
+                .catch(error => {
+                    alert("حدث خطأ، لم يتم إرسال المعلومات.");
+                    console.error(error);
+                });
+            } else {
+                alert("الرجاء تعبئة جميع الحقول.");
+            }
+        }
+    </script>
+    
+</body>
+</html>
