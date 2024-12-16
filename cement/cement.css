@@ -170,6 +170,7 @@
     @media only screen and (max-width: 480px) {
         body {
             background-color: #f0f0f0;
+            background-color: #424242;
         }
     
         .form-container {
